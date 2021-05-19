@@ -56,7 +56,7 @@ class StarbucksCardController {
         newCard.setBalance(20.00);
         newCard.setActivated(false);
         newCard.setStatus("New Card");
-        newCard.setReward(0);
+        newCard.setRewards(0);
 
         return repository.save(newCard);
     }
@@ -94,6 +94,36 @@ class StarbucksCardController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error. Card Not Found!");
         }
         return card;
+    }
+
+
+    @PostMapping("/card/{cardNum}/{value}")
+    void addBalance(@PathVariable String cardNum, @PathVariable double value, HttpServletResponse reponse) {
+        StarbucksCard card = repository.findByCardNumber(cardNum);
+        if (card == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error. Card Not Found!");
+
+       // if(value.startsWith("-") )
+        //    throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error. Negative value added");
+
+        double old_balance = card.getBalance();
+        double new_balance = old_balance + (double) value;
+            
+        card.setBalance(new_balance);
+    }
+
+    @PostMapping("/card/rewards/{cardNum}")
+    void showRewards(@PathVariable String cardNum, HttpServletResponse reponse) {
+        StarbucksCard card = repository.findByCardNumber(cardNum);
+        if (card == null)
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error. Card Not Found!");
+
+        if(card.getRewards() == 0 )
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Error. No Rewards Points Found");
+
+        card.getRewards();
+
+        
     }
 
 }

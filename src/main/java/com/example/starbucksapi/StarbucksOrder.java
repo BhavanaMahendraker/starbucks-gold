@@ -31,3 +31,13 @@ class StarbucksOrder {
     private String status ;
 
 }
+/*
+    type starbucks_order struct {
+    Drink string
+    Milk string
+    Size string
+
+    Total float32
+    Status string
+    }
+*/

@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.processing.Generated;
 
 import java.util.HashMap;
+import org.springframework.ui.Model;
 
 
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,10 +13,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,14 +27,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.lang.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.stereotype.Controller;
 
-@RestController
+//@RestController
+@Controller
 public class StarbucksOrderController {
 
     private final StarbucksOrderRepository repository;
 
     @Autowired
     private StarbucksCardRepository cardRepository;
+
+    //@Autowired
+    //private StarbucksRegisterRepository registerRepository;
 
     class Message {
         private String status;
@@ -46,11 +53,14 @@ public class StarbucksOrderController {
         }
     }
 
+
     private HashMap<String, StarbucksOrder> orders = new HashMap<>();
 
     public StarbucksOrderController(StarbucksOrderRepository repository){
         this.repository = repository;
     }
+
+
 
     @GetMapping("/orders")
     List<StarbucksOrder> all() {
@@ -203,7 +213,12 @@ public class StarbucksOrderController {
     @PostMapping("/order/register/{regid}/pay/{cardnum}")
     StarbucksCard processOrder(@PathVariable String regid, @PathVariable String cardnum){
         System.out.println("Pay for Order: Reg ID = " + regid + " Using Card = " + cardnum);
+        
+        //StarbucksOrder register = registerRepository.get(regid);
+        //StarbucksOrder active = orders.get(register);
+
         StarbucksOrder active = orders.get(regid);
+
         if(active == null){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Order Not Found!");
         }    
@@ -229,9 +244,9 @@ public class StarbucksOrderController {
         }
 
         double new_balance = balance - price;
-        double new_reward = card.getReward() + price; 
+        int old_rewards = card.getRewards();
+        card.setRewards(old_rewards + (int)price);
         card.setBalance(new_balance);
-        card.setReward(new_reward);
         String status = "Paid with Card: " + cardnum + " Balance: $" + new_balance + ".";
         active.setStatus(status);
         cardRepository.save(card);

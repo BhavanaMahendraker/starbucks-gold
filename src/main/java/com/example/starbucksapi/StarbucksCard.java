@@ -25,8 +25,8 @@ class StarbucksCard {
     @Column(nullable=false) private String cardCode ;
     @Column(nullable=false) private double balance ;
     @Column(nullable=false) private boolean activated;
+    @Column(nullable=false) private int rewards;
                             private String status ;
-                            private double reward;
 
     public boolean isActivated() { 
         return activated == true;
