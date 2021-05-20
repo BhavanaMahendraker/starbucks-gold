@@ -382,8 +382,7 @@ public class PaymentsController {
         /*
         These commands were written using lab6 starbucks api. 
         Based on my understanding the store data in H2 database.
-        */
-        /*
+        
         PaymentsCommand newcmd = new PaymentsCommand();
 
         newcmd.setFirstname(command.getFirstname());

@@ -45,5 +45,10 @@ public class PingController {
         model.addAttribute( "message", "Hello World!" );
         return "balance" ; 
     }
+    @GetMapping("/creditcards")
+    public String viewCard(Model model) {
+        model.addAttribute( "message", "Hello World!" );
+        return "creditcards" ; 
+    }
 
 }
