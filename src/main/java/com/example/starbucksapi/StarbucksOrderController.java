@@ -29,8 +29,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.stereotype.Controller;
 
-//@RestController
-@Controller
+@RestController
+//@Controller
 public class StarbucksOrderController {
 
     private final StarbucksOrderRepository repository;
